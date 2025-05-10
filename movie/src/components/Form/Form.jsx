@@ -8,6 +8,10 @@ function Form(props) {
     // membuat state date 
     const [date, setDate] = useState("");
 
+    // Membuat state title dan date errors
+    const [isTitleError, setIsTitleError] = useState(false);
+    const [isDateError, setIsDateError] = useState(false);
+
     const { movies, setMovies } = props;
 
     function handleTitle(e) {
@@ -21,13 +25,28 @@ function Form(props) {
     function handleSubmit(e) {
         e.preventDefault();
 
-        const movie = {
-            id: nanoid(), title: title,
-            year: date, type: 'Movie',
-            poster: "https://picsum.photos/300/400",
-        };
+        if (title === "") {
+            setIsDateError(false);
+            setIsTitleError(true);
+        }
+        else if ( date === "") {
+            setIsTitleError(false);
+            setIsDateError(true);
+        }
+        else {
+            const movie = {
+                id: nanoid(), title: title,
+                year: date, type: 'Movie',
+                poster: "https://picsum.photos/300/400",
+            };
 
-        setMovies([...movies, movie])
+            setMovies([...movies, movie])
+            setIsTitleError(false);
+            setIsDateError(false);
+        }
+
+
+
     }
 
 
@@ -48,12 +67,20 @@ function Form(props) {
                             <div>
                                 <label htmlFor="title" className={styles.form__label}>Title</label>
                                 <input id="title" type="text" value={title} onChange={handleTitle} className={styles.form__input} />
-                                <p className={styles.form__p}>Title Wajib di isi</p>
+                                {/* 
+                                jika error title true: muncul error
+                                jiko tidak munculkan string kosong
+                                */}
+                                {isTitleError && <p className={styles.form__p}>Title Wajib di isi</p>}
                             </div>
                             <div>
                                 <label htmlFor="title" className={styles.form__label}>Year</label>
                                 <input id="date" type="text" value={date} onChange={handleDate} className={styles.form__input} />
-                                <p className={styles.form__p}>Year Wajib di isi</p>
+                                {/* 
+                                jika error date true: muncul error
+                                jika tidak maka muncul string kosong
+                                */}
+                                {isDateError && <p className={styles.form__p}>Year Wajib di isi</p>}
                             </div>
                             <div>
                                 <button className={styles.form__button}>Submit</button>
